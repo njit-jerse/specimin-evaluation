@@ -75,7 +75,7 @@ def download_with_wget_or_curl(url, save_as):
         if isWindows():
             subprocess.run(["curl", "-L", "-o", save_as, url])
         else:
-            subprocess.run(["wget", "-q", "--show-progress", "-O", save_as, url], check=True)
+            subprocess.run(["wget", "-q", "-O", save_as, url], check=True)
         print("File downloaded successfully.")
     except subprocess.CalledProcessError as e:
         print("Failed to download file:", e)
@@ -578,8 +578,11 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
                 command = "gradlew.bat"
             else:
                 command = "./gradlew"
-                
-            command = f"{command} -b  {target_gradle_script} compileJava"
+            
+            if issue_id.startswith("na"):
+                command = f"{command} -b {target_gradle_script} build"
+            else:
+                command = f"{command} -b {target_gradle_script} compileJava"
 
             min_prgrm_build_status = subprocess.run(command, cwd = specimin_path, shell=True, stderr=log_file_obj)
             print(f"{issue_id} Minimized program gradle build status = {min_prgrm_build_status.returncode}")
@@ -589,17 +592,19 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
             return result
     else:
         if build_system != "javac":
-            cf_url = issue_data.get("cf_release_url", "")
-            version = issue_data.get("cf_version", "1.9.13")
-            cf_path = f"checker-framework-{version}"
-            cf_abs_path = os.path.abspath(cf_path)
-            cf_zip = f"{cf_abs_path}.zip"
-            full_url = cf_url + "/" + cf_path + "/" + cf_path + ".zip"
-            if not os.path.exists(cf_zip):
-                download_with_wget_or_curl(full_url, cf_zip)
+            # NullAway uses gradle to resolve its dependencies
+            if not issue_id.startswith("na"):
+                cf_url = issue_data.get("release_url", "")
+                version = issue_data.get("version", "1.9.13")
+                cf_path = f"checker-framework-{version}"
+                cf_abs_path = os.path.abspath(cf_path)
+                cf_zip = f"{cf_abs_path}.zip"
+                full_url = cf_url + "/" + cf_path + "/" + cf_path + ".zip"
+                if not os.path.exists(cf_zip):
+                    download_with_wget_or_curl(full_url, cf_zip)
 
-            if os.path.exists(cf_zip) and not os.path.exists(cf_abs_path):
-                unzip_file(cf_zip)
+                if os.path.exists(cf_zip) and not os.path.exists(cf_abs_path):
+                    unzip_file(cf_zip)
         
         if isWindows():
             if build_system == "javac":
@@ -760,7 +765,8 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
         return result
     
     status = False
-    if (JsonKeys.BUG_TYPE.value in issue_data and issue_data[JsonKeys.BUG_TYPE.value] == "crash"):
+    # NullAway issues all use regexes for verification
+    if (not issue_id.startswith("na") and JsonKeys.BUG_TYPE.value in issue_data and issue_data[JsonKeys.BUG_TYPE.value] == "crash"):
         require_stack = issue_data.get("require_stack", False)
         status = compare_crash_log(expected_log_file, log_file, require_stack)
     else:
@@ -780,7 +786,7 @@ def compare_pattern_data(expected_log_path, actual_log_path, bug_pattern_data):
 
     with open(actual_log_path, "r") as file:
         actual_log_file_content = file.read()
-
+    
     #Algorithm steps:
     #1.extract data from expected log file. One matched item should be there since only desired log information is in expected log file
     #2.extract data from build log file. Multiple matched items can be found. 
@@ -797,6 +803,10 @@ def compare_pattern_data(expected_log_path, actual_log_path, bug_pattern_data):
         if key == "file_pattern":
             expected_content = os.path.basename(expected_content)
             actual_content = [os.path.basename(item) for item in actual_content]
+        
+        # Treat all whitespace the same
+        expected_content = ' '.join(expected_content.split())
+        actual_content = [' '.join(item.split()) for item in actual_content]
 
         if expected_content in actual_content:
             continue
