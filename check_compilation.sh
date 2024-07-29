@@ -60,7 +60,7 @@ for target in $issue_ids; do
     # javac relies on word splitting
     # shellcheck disable=SC2046
     if [ "$target" = "na-97" ]; then
-      javac -classpath "$SPECIMIN/src/test/resources/shared/checker-qual-3.42.0.jar" $(find . -name "*.java") --patch-module java.base=src
+      javac -classpath "$SPECIMIN/src/test/resources/shared/checker-qual-3.42.0.jar" $(find . -name "*.java") --patch-module java.base=jdk/src
     else
       javac -classpath "$SPECIMIN/src/test/resources/shared/checker-qual-3.42.0.jar" $(find . -name "*.java")
     fi
