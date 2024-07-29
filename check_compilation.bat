@@ -104,6 +104,9 @@ for %%t in (!issue_ids!) do (
       for /r %%F in (*.java) do (
          set "JAVA_FILES=!JAVA_FILES! %%F"
       )
+      if "!testcase!"=="na-97" do (
+         set "JAVA_FILES=!JAVA_FILES! --patch-module java.base=src"
+      )
       javac -classpath "%SPECIMIN%\src\test\resources\shared\checker-qual-3.42.0.jar" !JAVA_FILES!
       set javac_status=!errorlevel!
       if !javac_status!==0 ( 
