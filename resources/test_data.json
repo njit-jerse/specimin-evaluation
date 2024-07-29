@@ -880,7 +880,7 @@
             "code_pattern": "features\\.(.*)",
             "error_pattern": "\\s*Stack Trace:\\n(.*)"
         },
-        "version": "0.10.12",
+        "version": "0.10.16",
         "java_version": "",
         "note": "",
         "bug_type": "crash",

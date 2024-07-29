@@ -787,15 +787,6 @@ def compare_pattern_data(expected_log_path, actual_log_path, bug_pattern_data):
     with open(actual_log_path, "r") as file:
         actual_log_file_content = file.read()
     
-    print('expected:')
-    print(expected_log_file_content)
-
-    print()
-
-    print('actual:')
-    print(actual_log_file_content)
-    print()
-
     #Algorithm steps:
     #1.extract data from expected log file. One matched item should be there since only desired log information is in expected log file
     #2.extract data from build log file. Multiple matched items can be found. 
