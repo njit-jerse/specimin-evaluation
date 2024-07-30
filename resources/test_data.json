@@ -694,7 +694,7 @@
             }
         ],
         "bug_pattern": {
-            "error_pattern": "\\s*Stack Trace:\\n(.*)"
+            "error_pattern": "Stack Trace:\\n(.*Exception)"
         },
         "version": "0.4.6",
         "java_version": "",
