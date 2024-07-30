@@ -61,7 +61,8 @@ class TestMain(unittest.TestCase):
         targets = [{
                     "method": "getMode(ColumnMetadata, Map<String, String>)",
                     "file": "IndexMode.java",
-                    "package": 'org.apache.cassandra.index.sasi.conf'
+                    "package": 'org.apache.cassandra.index.sasi.conf',
+                    "model": "cf"
                    }]
  
         target_dir = '/user/ISSUES/cf-6077'
@@ -69,6 +70,7 @@ class TestMain(unittest.TestCase):
         target_command = ''
         with open('resources/specimin_command_cf-6077.txt','r') as file:
             target_command = file.read()
+        target_command = target_command.strip()
         self.assertEqual(command, target_command)
         # not executing since this crashes specimin
         proj_name = 'kafka-sensors'
@@ -76,13 +78,15 @@ class TestMain(unittest.TestCase):
         targets = [{
                     "method": "transform(String, byte[])",
                     "file": "Avro2Confluent.java",
-                    "package": 'com.fillmore_labs.kafka.sensors.serde.confluent.interop'
+                    "package": 'com.fillmore_labs.kafka.sensors.serde.confluent.interop',
+                    "model" : "cf"
                    }]
 
         target_dir = '/user/ISSUES/cf-6019'
         command = main.build_specimin_command(proj_name, target_dir, root, targets)
         with open('resources/specimin_command_cf-6019.txt','r') as file:
             target_command = file.read()
+        target_command = target_command.strip()
         self.assertEqual(command, target_command)
         #not executing since it crashes specimin.
 
@@ -109,7 +113,8 @@ class TestMain(unittest.TestCase):
         targets = [{
                     "method": "bar()",
                     "file": "Simple.java",
-                    "package": "com.example"
+                    "package": "com.example",
+                    "model" : "cf"
                    }]
         target_dir = 'resources/onefilesimple'
 
