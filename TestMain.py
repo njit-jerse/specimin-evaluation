@@ -61,7 +61,8 @@ class TestMain(unittest.TestCase):
         targets = [{
                     "method": "getMode(ColumnMetadata, Map<String, String>)",
                     "file": "IndexMode.java",
-                    "package": 'org.apache.cassandra.index.sasi.conf'
+                    "package": 'org.apache.cassandra.index.sasi.conf',
+                    "model": "cf"
                    }]
  
         target_dir = '/user/ISSUES/cf-6077'
@@ -76,7 +77,8 @@ class TestMain(unittest.TestCase):
         targets = [{
                     "method": "transform(String, byte[])",
                     "file": "Avro2Confluent.java",
-                    "package": 'com.fillmore_labs.kafka.sensors.serde.confluent.interop'
+                    "package": 'com.fillmore_labs.kafka.sensors.serde.confluent.interop',
+                    "model" : "cf"
                    }]
 
         target_dir = '/user/ISSUES/cf-6019'
@@ -109,7 +111,8 @@ class TestMain(unittest.TestCase):
         targets = [{
                     "method": "bar()",
                     "file": "Simple.java",
-                    "package": "com.example"
+                    "package": "com.example",
+                    "model" : "cf"
                    }]
         target_dir = 'resources/onefilesimple'
 
