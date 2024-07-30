@@ -385,7 +385,7 @@ def build_specimin_command(project_name: str,
     if modularity_model:
         model_subcommand = " --modularityModel " + f"\"{modularity_model}\""
 
-    command_args = root_dir_subcommand + " " + output_dir_subcommand + " " + model_subcommand + " " + target_file_subcommand + " " + target_method_subcommand +  target_field_subcommand + jar_path_subcommand
+    command_args = root_dir_subcommand + " " + output_dir_subcommand + model_subcommand + " " + target_file_subcommand + " " + target_method_subcommand +  target_field_subcommand + jar_path_subcommand
     
 
     command = ""

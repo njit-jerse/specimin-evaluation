@@ -70,6 +70,7 @@ class TestMain(unittest.TestCase):
         target_command = ''
         with open('resources/specimin_command_cf-6077.txt','r') as file:
             target_command = file.read()
+        target_command = target_command.strip()
         self.assertEqual(command, target_command)
         # not executing since this crashes specimin
         proj_name = 'kafka-sensors'
@@ -85,6 +86,7 @@ class TestMain(unittest.TestCase):
         command = main.build_specimin_command(proj_name, target_dir, root, targets)
         with open('resources/specimin_command_cf-6019.txt','r') as file:
             target_command = file.read()
+        target_command = target_command.strip()
         self.assertEqual(command, target_command)
         #not executing since it crashes specimin.
 
