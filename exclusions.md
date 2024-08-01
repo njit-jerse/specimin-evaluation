@@ -19,8 +19,8 @@ NA-791B is not reproducible in the reported target file. While the same crash
 occurs while running NullAway on the original codebase, we do not receive the
 error because:
 
-1. The gradle task runs successfully on the target file _or_
-2. The gradle task is crashing before it can reach the target file (more likely)
+1. NullAway runs successfully on the target file _or_
+2. NullAway is crashing before it can reach the target file (more likely)
 
 Since we cannot verify that the bug is reproducible on the target file, we
 exclude this bug.
