@@ -845,7 +845,7 @@
         ],
         "bug_pattern": {
             "file_pattern": "(\\w+\\.java)",
-            "error_pattern": "warning: (.*)"
+            "error_pattern": "error: (.*)"
         },
         "version": "0.10.6",
         "java_version": "11",
@@ -877,7 +877,7 @@
         ],
         "bug_pattern": {
             "file_pattern": "(\\w+\\.java)",
-            "error_pattern": "warning: (.*)"
+            "error_pattern": "error: (.*)"
         },
         "version": "0.10.6",
         "java_version": "11",
