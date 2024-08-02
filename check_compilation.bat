@@ -6,10 +6,10 @@ rem This script runs javac on all of the minimized outputs under ISSUES/ .
 rem It returns 2 if any of them fail to compile, 1 if there are any malformed directories,
 rem and 0 if all of them do compile.
 
-rem It is desirable that all of the expected Specimin's minimized program gets compiled, because Specimin
+rem It is desirable that all of the expected SpecSlice's minimized program gets compiled, because SpecSlice
 rem should produce independently-compilable programs.
 
-rem when this script is invoked from specimin CI, 
+rem when this script is invoked from specSlice CI,
 rem compilation result will be compared with "expected" result and CI will be passed/failed accordingly.
 
 rem usage: shell check_compilation.sh 1 --> for approximate mode
@@ -35,7 +35,7 @@ if !param!=="1" (
 
 set returnval=0
 set compile_status_json=^{
-echo Specimin path: %SPECIMIN%
+echo SpecSlice path: %SPECSLICE%
 
 set issue_ids=
 
@@ -68,7 +68,7 @@ for %%t in (!issue_ids!) do (
    if !continue!==0 (
       cd !testcase!
       if !errorlevel!==1 (
-         rem Due to how the specimin CI runs (choosing only a few test cases to run), we should
+         rem Due to how the specSlice CI runs (choosing only a few test cases to run), we should
          rem ignore test cases which were not run
          echo !testcase! not found. Ignoring it.
          set continue=1
@@ -84,7 +84,7 @@ for %%t in (!issue_ids!) do (
    )
 
    if !continue!==0 (
-      rem check if any directory exists inside output. If no directory there, specimin failed on the input target
+      rem check if any directory exists inside output. If no directory there, specSlice failed on the input target
       rem in that case, ignoring it.
       set directory_exists=0
       for /d %%d in (*) do (
@@ -107,7 +107,7 @@ for %%t in (!issue_ids!) do (
       if "!testcase!"=="na-97" do (
          set "JAVA_FILES=!JAVA_FILES! --patch-module java.base=jdk/src"
       )
-      javac -classpath "%SPECIMIN%\src\test\resources\shared\checker-qual-3.42.0.jar" !JAVA_FILES!
+      javac -classpath "%SPECSLICE%\src\test\resources\shared\checker-qual-3.42.0.jar" !JAVA_FILES!
       set javac_status=!errorlevel!
       if !javac_status!==0 ( 
          echo Running javac on !testcase!/output PASSES

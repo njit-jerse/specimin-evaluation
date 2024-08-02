@@ -84,7 +84,7 @@
     {
         "issue_id" : "cf-6060",
         "url": "https://github.com/njit-jerse/jOOQ.git",
-        "branch": "specimin",
+        "branch": "specSlice",
         "commit_hash": "",
         "project_name": "jOOQ",
         "build_command": "mvn -V -B -e clean compile -Dcheckerframework.checkers=org.checkerframework.checker.signedness.SignednessChecker -Dcheckerframework.suppress=\"type.anno.before\"",

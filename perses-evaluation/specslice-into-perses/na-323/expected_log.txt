@@ -1,0 +1,3 @@
+/home/sam/repos/perses-evaluation/na-323/input/src/main/java/com/cogvio/time/MutableClock.java:18: error: [NullAway] initializer method does not guarantee @NonNull fields instant, zone are initialized along all control-flow paths (remember to check for exceptions or early returns).
+    private MutableClock(final Instant instant, final ZoneId zone)
+            ^

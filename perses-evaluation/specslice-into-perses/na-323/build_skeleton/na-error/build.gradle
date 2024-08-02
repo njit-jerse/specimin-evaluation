@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'net.ltgt.errorprone' version '4.0.1'
+    id "com.diffplug.spotless" version "7.0.0.BETA1"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'com.uber.nullaway:nullaway:0.7.3'
+    annotationProcessor 'com.uber.nullaway:nullaway:0.7.3'
+    compileOnly 'com.google.errorprone:error_prone_core:2.29.0'
+    annotationProcessor 'com.google.errorprone:error_prone_core:2.29.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+}
+
+import net.ltgt.gradle.errorprone.CheckSeverity
+
+tasks.withType(JavaCompile) {
+    options.errorprone {
+        disableAllChecks=true
+        check('NullAway', CheckSeverity.ERROR)
+        option('NullAway:AnnotatedPackages', 'com.cogvio.time')
+    }
+}
+spotless {
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}

@@ -4,10 +4,10 @@
 # It returns 2 if any of them fail to compile, 1 if there are any malformed directories,
 # and 0 if all of them do compile.
 #
-# It is desirable that all of the expected Specimin's minimized program gets compiled, because Specimin
+# It is desirable that all of the expected SpecSlice's minimized program gets compiled, because SpecSlice
 # should produce independently-compilable programs.
 
-# when this script is invoked from specimin CI, 
+# when this script is invoked from specSlice CI,
 # compilation result will be compared with "expected" result and CI will be passed/failed accordingly.
 
 # usage: shell check_compilation.sh 1 --> for approximate mode
@@ -29,7 +29,7 @@ fi
 
 returnval=0
 compile_status_json="{"
-echo "Specimin path: $SPECIMIN"
+echo "SpecSlice path: $SPECSLICE"
 
 #read all issue_idjson from json file
 issue_ids="$(jq -r '.[].issue_id' resources/test_data.json)"
@@ -47,7 +47,7 @@ for target in $issue_ids; do
       compile_status_json="$compile_status_json\n  \"$target\": \"FAIL\","
       continue
     fi
-    # check if any directory exists inside output. If no directory there, specimin failed on the input target
+    # check if any directory exists inside output. If no directory there, specSlice failed on the input target
     # in that case, ignoring it.
     directory_count="$(find ./ -mindepth 1 -type d | wc -l)"
     if [ "$directory_count" -eq 0 ]; then 
@@ -60,9 +60,9 @@ for target in $issue_ids; do
     # javac relies on word splitting
     # shellcheck disable=SC2046
     if [ "$target" = "na-97" ]; then
-      javac -classpath "$SPECIMIN/src/test/resources/shared/checker-qual-3.42.0.jar" $(find . -name "*.java") --patch-module java.base=jdk/src
+      javac -classpath "$SPECSLICE/src/test/resources/shared/checker-qual-3.42.0.jar" $(find . -name "*.java") --patch-module java.base=jdk/src
     else
-      javac -classpath "$SPECIMIN/src/test/resources/shared/checker-qual-3.42.0.jar" $(find . -name "*.java")
+      javac -classpath "$SPECSLICE/src/test/resources/shared/checker-qual-3.42.0.jar" $(find . -name "*.java")
     fi
     javac_status=$?
     if [ $javac_status -eq 0 ]; then 

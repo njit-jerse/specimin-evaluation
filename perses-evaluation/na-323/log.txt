@@ -1,0 +1,21 @@
+> Task :clean
+
+> Task :compileJava FAILED
+/home/sam/repos/perses-evaluation/na-323/input/src/main/java/com/cogvio/time/MutableClock.java:18: error: [NullAway] initializer method does not guarantee @NonNull fields instant, zone are initialized along all control-flow paths (remember to check for exceptions or early returns).
+    private MutableClock(final Instant instant, final ZoneId zone)
+            ^
+    (see http://t.uber.com/nullaway )
+1 error
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+BUILD FAILED in 702ms
+2 actionable tasks: 2 executed

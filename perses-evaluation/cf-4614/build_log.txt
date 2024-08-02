@@ -1,0 +1,34 @@
+> Task :clean
+> Task :createCheckerFrameworkManifest
+
+> Task :compileJava FAILED
+/home/sam/repos/perses-evaluation/cf-4614/input/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/PersesTempRoot_Version.java_falsepositive.sh_20240731_174032_00/000277/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/Version.java:14: error: cannot find symbol
+            .map(e -> String.format("%s:%s", e.getKey(), e.getValue()))
+            ^
+  symbol:   method map((e)->Strin[...]ue()))
+  location: interface Map<String,String>
+/home/sam/repos/perses-evaluation/cf-4614/input/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/PersesTempRoot_Version.java_falsepositive.sh_20240731_174032_00/000277/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/Version.java:4: error: [type.checking.not.run] NullnessChecker did not run because of a previous error issued by javac
+class Version {
+^
+Note: /home/sam/repos/perses-evaluation/cf-4614/input/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/PersesTempRoot_Version.java_falsepositive.sh_20240731_174032_00/000277/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/Version.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+2 errors
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.9/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 1s
+3 actionable tasks: 3 executed

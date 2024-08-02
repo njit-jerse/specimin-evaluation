@@ -1,0 +1,35 @@
+> Task :clean
+> Task :createCheckerFrameworkManifest
+
+> Task :compileJava FAILED
+error: [expression.unparsable.type.invalid] Expression invalid in dependent type annotation: [error for expression: ()java.util.Map<java.lang.String,java.lang.String>.getAllVersionInformation(); error: Invalid '()java.util.Map<java.lang.String,java.lang.String>.getAllVersionInformation()' because the expression did not parse. Error message: Encountered unexpected token: "java" <IDENTIFIER>]
+/home/sam/repos/perses-evaluation/4614/output/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/Version.java:5: error: [initialization.static.field.uninitialized] static field VERSION_INFORMATION not initialized
+  static Map VERSION_INFORMATION;
+             ^
+/home/sam/repos/perses-evaluation/4614/output/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/Version.java:14: error: [lambda.param.type.incompatible] incompatible parameter types for parameter 0 in lambda expression.
+            .map(e -> String.format("%s:%s", e.getKey(), e.getValue()))
+                 ^
+  found   : Entry<@KeyFor("()java.util.Map<java.lang.String,java.lang.String>.getAllVersionInformation()") String, String>
+  required: Entry<@KeyFor("[error for expression: ()java.util.Map<java.lang.String,java.lang.String>.getAllVersionInformation(); error: Invalid '()java.util.Map<java.lang.String,java.lang.String>.getAllVersionInformation()' because the expression did not parse. Error message: Encountered unexpected token: "java" <IDENTIFIER>]") String, String>
+Note: /home/sam/repos/perses-evaluation/4614/output/cf-parser-error/src/main/java/net/mtu/eggplant/checker/parser_error/Version.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+3 errors
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.9/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 1s
+3 actionable tasks: 3 executed

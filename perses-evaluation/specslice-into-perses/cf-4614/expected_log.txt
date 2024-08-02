@@ -1,0 +1,5 @@
+/home/jpschewe/projects/checker-bugs/src/main/java/net/mtu/eggplant/checker/parser_error/Version.java:84: error: [lambda.param.type.incompatible] incompatible parameter types for parameter 0 in lambda expression.
+      .map(e -> String.format("%s:%s", e.getKey(), e.getValue()))
+           ^
+  found   : Entry<@KeyFor("()java.util.Map<java.lang.String,java.lang.String>.getAllVersionInformation()") String, String>
+  required: Entry<@KeyFor("[error for expression: ()java.util.Map<java.lang.String,java.lang.String>.getAllVersionInformation(); error: Invalid '()java.util.Map<java.lang.String,java.lang.String>.getAllVersionInformation()' because the expression did not parse. Error message: Encountered unexpected token: "java" <IDENTIFIER>]") String, String>
