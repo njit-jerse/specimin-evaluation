@@ -33,4 +33,4 @@ Types.lub() function, which crashes with an NPE. Based on the comments
 in the issue, the CF maintainers themselves aren't sure whether the bug
 is in the CF or in javac. Furthermore, the bug is still open, so there is
 no test case available to use as ground truth. Since we can't reproduce this
-with javac, even though we think it's a javac bug, we're excluding it.
+with javac, even though we think it's probably a javac bug, we're excluding it.
