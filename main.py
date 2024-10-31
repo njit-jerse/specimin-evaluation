@@ -19,13 +19,13 @@ import math
 import statistics
 
 issue_folder_dir = 'ISSUES'
-specSlice_input = 'input'
-specSlice_output = 'output'
-specSlice_jar_output = 'jar_output'
-specSlice_project_name = 'specSlice'
-specSlice_source_url = 'https://github.com/kelloggm/specSlice.git'
+TypeSlice_input = 'input'
+TypeSlice_output = 'output'
+TypeSlice_jar_output = 'jar_output'
+TypeSlice_project_name = 'TypeSlice'
+TypeSlice_source_url = 'https://github.com/kelloggm/TypeSlice.git'
 TIMEOUT_DURATION = 300
-specSlice_env_var = "SPECSLICE"
+TypeSlice_env_var = "TypeSlice"
 json_status_file_name = "target_status.json"
 minimized_program_build_log_file = "build_log.txt"
 linux_system_identifier = "Linux"
@@ -55,14 +55,14 @@ def read_json_from_file(file_path):
         print(f"File not found: {file_path}")
         return None
 
-def get_specSlice_env_var():
+def get_TypeSlice_env_var():
     '''
-    Check and returns the path of the SpecSlice program if defined
+    Check and returns the path of the TypeSlice program if defined
     Retruns:
-        Path of the local SpecSlice program
+        Path of the local TypeSlice program
     '''
-    specSlice_env_value = os.environ.get(specSlice_env_var)
-    return specSlice_env_value
+    TypeSlice_env_value = os.environ.get(TypeSlice_env_var)
+    return TypeSlice_env_value
 
 def set_directory_exec_permission(directory_path):
     current_permissions = os.stat(directory_path).st_mode
@@ -125,10 +125,10 @@ def get_repository_name(github_ssh: str):
 
 def create_issue_directory(issue_container_dir, issue_id):
     '''
-    Creates a directory to store a SPECSLICE target project. Example: issue_id of cf-111 will create
+    Creates a directory to store a TypeSlice target project. Example: issue_id of cf-111 will create
     a cf-111 directory inside 'issue_container_dir'. Two other directory (input and output inside) will
     be created inside 'issue_container_dir/issue_id' directory. Target project is cloned inside 
-    'issue_container_dir/issue_id/input' directory. SPECSLICE output is stored inside 'issue_container_dir/issue_id/output'
+    'issue_container_dir/issue_id/input' directory. TypeSlice output is stored inside 'issue_container_dir/issue_id/output'
     directory
 
     issue_container_dir
@@ -141,15 +141,15 @@ def create_issue_directory(issue_container_dir, issue_id):
         issue_id (str): Name of the directory to be created inside container directory.
 
     Returns:
-        specSlice_input_dir (str): A target directory of SPECSLICE. (issue_container_dir/issue_id/input) 
+        TypeSlice_input_dir (str): A target directory of TypeSlice. (issue_container_dir/issue_id/input) 
     '''
     issue_directory_name = os.path.join(issue_container_dir, issue_id)
     os.makedirs(issue_directory_name, exist_ok=True)
 
-    specSlice_input_dir = os.path.join(issue_directory_name, specSlice_input)
-    os.makedirs(specSlice_input_dir, exist_ok=True)
+    TypeSlice_input_dir = os.path.join(issue_directory_name, TypeSlice_input)
+    os.makedirs(TypeSlice_input_dir, exist_ok=True)
 
-    return specSlice_input_dir
+    return TypeSlice_input_dir
 
 
 def is_git_directory(dir):
@@ -256,36 +256,36 @@ def perform_git_pull (directory):
     command=["git", "pull", "origin", "--rebase"]
     subprocess.run(command, cwd=directory)
 
-def clone_specSlice(path_to_clone, url): 
+def clone_TypeSlice(path_to_clone, url): 
     '''
-    Clone the latest SpecSlice project from github
+    Clone the latest TypeSlice project from github
 
     Parameters:
-        path_to_clone (str): Path where SpecSlice is to be clonned
-        url (str): url of specSlice
+        path_to_clone (str): Path where TypeSlice is to be clonned
+        url (str): url of TypeSlice
     '''
-    spcimin_source_path = os.path.join(issue_folder_dir, specSlice_project_name)
+    spcimin_source_path = os.path.join(issue_folder_dir, TypeSlice_project_name)
     if (os.path.exists(spcimin_source_path)) and os.path.isdir(spcimin_source_path):
         perform_git_pull(spcimin_source_path)
     else:
         get_target_data(url, "", "", path_to_clone)
 
 
-def build_specSlice_command(project_name: str,
+def build_TypeSlice_command(project_name: str,
                            target_base_dir_path: str,
                            root_dir: str,  
                            targets: list,
                            jar_path: str = "",
                            isJarMode = False):
     '''
-    Build the gradle command to execute SpecSlice on target project
+    Build the gradle command to execute TypeSlice on target project
 
     issue_container_dir(ISSUES)
     |--- issue_id(cf-1291)     
     |    |--- input  ---> it contains the git repository of a target project
     |    |      |----nomulus/core/src/main/java/    ---> this is the root directory of a package
     |    |                                   |---package_path/file.java (daikon/chicory/PureMethodInfo.java)  --> a target file
-    |    |--- output --> Contains minimization result of SpecSlice
+    |    |--- output --> Contains minimization result of TypeSlice
 
     
     Parameters:
@@ -295,16 +295,16 @@ def build_specSlice_command(project_name: str,
         targets ({'method': '' or 'field': '', 'file': '', 'package': '', 'model' : ''}) : target java file, modularity model, and method/field name data
     
     Retruns:
-        command (str): The gradle command of SPECSLICE for the issue.
+        command (str): The gradle command of TypeSlice for the issue.
     '''
     
     if not os.path.isabs(target_base_dir_path):
         raise ValueError("Invalid argument: target_base_dir_path must be an absolute path")
 
     if isJarMode:
-        output_dir = os.path.join(target_base_dir_path, specSlice_jar_output, project_name, "src", "main", "java")
+        output_dir = os.path.join(target_base_dir_path, TypeSlice_jar_output, project_name, "src", "main", "java")
     else:
-        output_dir = os.path.join(target_base_dir_path, specSlice_output, project_name, "src", "main", "java")
+        output_dir = os.path.join(target_base_dir_path, TypeSlice_output, project_name, "src", "main", "java")
                                   
     if os.path.exists(output_dir):
         # Add \\?\ to enable long path support for Windows
@@ -315,7 +315,7 @@ def build_specSlice_command(project_name: str,
         else:
             shutil.rmtree(output_dir)
 
-    root_dir = os.path.join(target_base_dir_path, specSlice_input, project_name, root_dir)
+    root_dir = os.path.join(target_base_dir_path, TypeSlice_input, project_name, root_dir)
     root_dir = root_dir.rstrip(os.sep) + os.sep
 
     # avoid mixed slashes + convert \ to / for gradlew
@@ -352,7 +352,7 @@ def build_specSlice_command(project_name: str,
 
         if method_name:
             #if non-primary class exists, file name will not be included in target-method
-            # Look for PR #177: https://github.com/kelloggm/specSlice/pull/177
+            # Look for PR #177: https://github.com/kelloggm/TypeSlice/pull/177
 
             if JsonKeys.NON_PRIMARY_CLASS.value in target and target[JsonKeys.NON_PRIMARY_CLASS.value]:
                 qualified_method_name = package_name + "." + target[JsonKeys.NON_PRIMARY_CLASS.value] + inner_class_name + "#" + method_name
@@ -406,16 +406,16 @@ def build_specSlice_command(project_name: str,
     
     return command
 
-def run_specSlice(issue_name, command, directory) -> Result:
+def run_TypeSlice(issue_name, command, directory) -> Result:
     '''
-    Execute SPECSLICE on a target project
+    Execute TypeSlice on a target project
 
     Parameters:
-        command (str): The gradle command to run specSlice
-        directory (str): The base directory of the specSlice repository
+        command (str): The gradle command to run TypeSlice
+        directory (str): The base directory of the TypeSlice repository
     
     Returns: 
-        Result: execution result of SpecSlice
+        Result: execution result of TypeSlice
     '''
     print(f"{issue_name} executing...")
     try:
@@ -444,7 +444,7 @@ def run_specSlice(issue_name, command, directory) -> Result:
         return Result(issue_name, "FAIL", f"Unhandled exception occurred: {e}")
 
 
-def pullDependencies(script_path, specSlice_path):
+def pullDependencies(script_path, TypeSlice_path):
     command = ""
 
     # avoid mixed slashes + convert \ to / for gradlew
@@ -456,7 +456,7 @@ def pullDependencies(script_path, specSlice_path):
 
     command = f"{command} -b {script_path} pullJar"
     
-    status = subprocess.run(command, cwd = specSlice_path, shell=True)
+    status = subprocess.run(command, cwd = TypeSlice_path, shell=True)
     print(f"Jar pull status = {status.returncode}")
 
 def copyFiles(src_dir, des_dir):
@@ -470,7 +470,7 @@ def copyFiles(src_dir, des_dir):
 
 def performEvaluation(issue_data, isJarMode = False) -> Result:
     '''
-    For each issue data, execute SPECSLICE on a target project. 
+    For each issue data, execute TypeSlice on a target project. 
 
     Parameters:
         issue ({}): json data associated with an issue    
@@ -486,42 +486,42 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
     input_dir = create_issue_directory(issue_folder_abs_dir, issue_id)
     repo_name = get_repository_name(url)
 
-    specSlice_path = get_specSlice_env_var()
-    if not specSlice_path or not os.path.exists(specSlice_path):
-        print("Clone copy of SpecSlice is used")
-        specSlice_path = os.path.join(issue_folder_abs_dir, specSlice_project_name)
+    TypeSlice_path = get_TypeSlice_env_var()
+    if not TypeSlice_path or not os.path.exists(TypeSlice_path):
+        print("Clone copy of TypeSlice is used")
+        TypeSlice_path = os.path.join(issue_folder_abs_dir, TypeSlice_project_name)
 
     get_target_data(url, branch, commit_hash, input_dir) 
 
     jar_path = ""
     if isJarMode:
-        jar_path = os.path.join(issue_folder_abs_dir, issue_id, specSlice_input, repo_name, specSlice_project_name, "libs") # this should include the qual jar if needed
+        jar_path = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_input, repo_name, TypeSlice_project_name, "libs") # this should include the qual jar if needed
         os.makedirs(jar_path, exist_ok=True)
         req_dep_in_jar_mode = issue_data.get("has_dependency", False)
-        jar_pull_script = os.path.join(issue_folder_abs_dir, issue_id, specSlice_input, repo_name, specSlice_project_name, "dependency.gradle")
+        jar_pull_script = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_input, repo_name, TypeSlice_project_name, "dependency.gradle")
         if req_dep_in_jar_mode and not os.path.exists(jar_pull_script):
             print("Jar pull script is not available.")
             return Result(issue_id, "FAIL", "Jar pull script unavailable")
         elif req_dep_in_jar_mode and os.path.exists(jar_pull_script):
-            pullDependencies(jar_pull_script, specSlice_path)
+            pullDependencies(jar_pull_script, TypeSlice_path)
     elif qual_jar_required:
-        jar_path = os.path.join(issue_folder_abs_dir, issue_id, specSlice_input, repo_name, specSlice_project_name, "checker") # in seperate directory so that unnecessary jar's are not loaded
+        jar_path = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_input, repo_name, TypeSlice_project_name, "checker") # in seperate directory so that unnecessary jar's are not loaded
     else:
         jar_path = ""
     
-    qual_path = os.path.join(issue_folder_abs_dir, issue_id, specSlice_input, repo_name, specSlice_project_name, "checker")
+    qual_path = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_input, repo_name, TypeSlice_project_name, "checker")
     if isJarMode and qual_jar_required:
         if os.path.exists(qual_path):
             copyFiles(qual_path, jar_path)
     
-    specSlice_command = ""
+    TypeSlice_command = ""
     result: Result = None
     
-    specSlice_command = build_specSlice_command(repo_name, os.path.join(issue_folder_abs_dir, issue_id), issue_data[JsonKeys.ROOT_DIR.value], issue_data[JsonKeys.TARGETS.value], jar_path if os.path.exists(jar_path) else "", isJarMode)
+    TypeSlice_command = build_TypeSlice_command(repo_name, os.path.join(issue_folder_abs_dir, issue_id), issue_data[JsonKeys.ROOT_DIR.value], issue_data[JsonKeys.TARGETS.value], jar_path if os.path.exists(jar_path) else "", isJarMode)
 
-    print(f"build command: {specSlice_command}")
+    print(f"build command: {TypeSlice_command}")
     start_time = time.time()
-    result = run_specSlice(issue_id ,specSlice_command, specSlice_path)   
+    result = run_TypeSlice(issue_id ,TypeSlice_command, TypeSlice_path)   
     end_time = time.time()
 
     duration = round(end_time - start_time)
@@ -538,10 +538,10 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
     build_system = issue_data.get("build_system", "gradle")
     print(f"build used = {build_system}")
     if build_system == "gradle":
-        # build.gradle and settings.gradle are shipped with input program. It exists in the "specSlice" directory of the input program's root directory.
+        # build.gradle and settings.gradle are shipped with input program. It exists in the "TypeSlice" directory of the input program's root directory.
         # Copying both to the output directory of the minimized program.
-        build_gradle_path = os.path.join(issue_folder_abs_dir, issue_id, specSlice_input, repo_name, specSlice_project_name, "build.gradle")
-        settings_gradle_path = os.path.join(issue_folder_abs_dir, issue_id, specSlice_input, repo_name, specSlice_project_name, "settings.gradle")
+        build_gradle_path = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_input, repo_name, TypeSlice_project_name, "build.gradle")
+        settings_gradle_path = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_input, repo_name, TypeSlice_project_name, "settings.gradle")
 
         if not os.path.exists(build_gradle_path) or not os.path.exists(settings_gradle_path):
             print(f"{issue_id}: {build_gradle_path} or {settings_gradle_path} not found.")
@@ -549,13 +549,13 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
             return result
         
         if isJarMode:
-            gradle_files_destination_path = os.path.join(issue_folder_abs_dir, issue_id, specSlice_jar_output, repo_name)
+            gradle_files_destination_path = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_jar_output, repo_name)
             #../ISSUES/cf-xx/jar_output/projectname/build_log.txt
-            log_file = os.path.join(issue_folder_abs_dir, issue_id, specSlice_jar_output, repo_name, minimized_program_build_log_file)
+            log_file = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_jar_output, repo_name, minimized_program_build_log_file)
         else:
-            gradle_files_destination_path = os.path.join(issue_folder_abs_dir, issue_id, specSlice_output, repo_name)
+            gradle_files_destination_path = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_output, repo_name)
             #../ISSUES/cf-xx/output/projectname/build_log.txt
-            log_file = os.path.join(issue_folder_abs_dir, issue_id, specSlice_output, repo_name, minimized_program_build_log_file)
+            log_file = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_output, repo_name, minimized_program_build_log_file)
 
         if isWindows():
             build_gradle_path = os.path.normpath(build_gradle_path)
@@ -589,7 +589,7 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
             else:
                 command = f"{command} -b {target_gradle_script} compileJava"
 
-            min_prgrm_build_status = subprocess.run(command, cwd = specSlice_path, shell=True, stderr=log_file_obj)
+            min_prgrm_build_status = subprocess.run(command, cwd = TypeSlice_path, shell=True, stderr=log_file_obj)
             print(f"{issue_id} Minimized program gradle build status = {min_prgrm_build_status.returncode}")
         if min_prgrm_build_status.returncode == 0:
             print(f"{issue_id} Minimized program gradle build successful. Expected: Fail")
@@ -706,11 +706,11 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
         targets = issue_data.get("build_targets", "src/**/*.java")
         
         if isJarMode:
-            target_dir = os.path.join(issue_folder_abs_dir, issue_id, specSlice_jar_output, repo_name, targets)
-            log_file = os.path.join(issue_folder_abs_dir, issue_id, specSlice_jar_output, repo_name, minimized_program_build_log_file)
+            target_dir = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_jar_output, repo_name, targets)
+            log_file = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_jar_output, repo_name, minimized_program_build_log_file)
         else:
-            target_dir = os.path.join(issue_folder_abs_dir, issue_id, specSlice_output, repo_name, targets)
-            log_file = os.path.join(issue_folder_abs_dir, issue_id, specSlice_output, repo_name, minimized_program_build_log_file)
+            target_dir = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_output, repo_name, targets)
+            log_file = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_output, repo_name, minimized_program_build_log_file)
         
         set_directory_exec_permission(java_path)
         
@@ -727,10 +727,10 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
             print(f"{issue_id}: executing this command to check preservation status: {command_str}")
             ##
             if isWindows():
-                shell_script = os.path.join(issue_folder_abs_dir, issue_id, specSlice_jar_output if isJarMode else specSlice_output, repo_name, "build.bat")
+                shell_script = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_jar_output if isJarMode else TypeSlice_output, repo_name, "build.bat")
                 shell_script = os.path.normpath(shell_script)
             else:
-                shell_script = os.path.join(issue_folder_abs_dir, issue_id, specSlice_jar_output if isJarMode else specSlice_output, repo_name, "build.sh")
+                shell_script = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_jar_output if isJarMode else TypeSlice_output, repo_name, "build.sh")
             with open(shell_script, 'w') as script:
                 if isWindows():
                     script.write("@echo off\n")
@@ -763,7 +763,7 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
                 result.set_preservation_status("FAIL", "Min program is not showing issue with modular analyses")
                 return result
         
-    expected_log_file = os.path.join(issue_folder_abs_dir, issue_id, specSlice_input, repo_name, specSlice_project_name, "expected_log.txt")
+    expected_log_file = os.path.join(issue_folder_abs_dir, issue_id, TypeSlice_input, repo_name, TypeSlice_project_name, "expected_log.txt")
     if not os.path.exists(expected_log_file):
         print(f"{issue_id}: {expected_log_file} do not exists")
         result.set_preservation_status("FAIL", "Expected log file missing")
@@ -919,12 +919,12 @@ def main():
         sys.exit(1)
 
     os.makedirs(issue_folder_dir, exist_ok=True)   # create the issue holder directory
-    specSlice_path = get_specSlice_env_var()
-    if specSlice_path is not None and os.path.exists(specSlice_path) and os.path.isdir(specSlice_path):
-        print("Local SpecSlice copy is being used")
+    TypeSlice_path = get_TypeSlice_env_var()
+    if TypeSlice_path is not None and os.path.exists(TypeSlice_path) and os.path.isdir(TypeSlice_path):
+        print("Local TypeSlice copy is being used")
     else:
-        print("Local SpecSlice not found. Cloning a SpecSlice copy")
-        clone_specSlice(issue_folder_dir, specSlice_source_url)
+        print("Local TypeSlice not found. Cloning a TypeSlice copy")
+        clone_TypeSlice(issue_folder_dir, TypeSlice_source_url)
 
     parser = argparse.ArgumentParser(description='command line parser')
     parser.add_argument('-j', '--isJarMode', type=bool, help='pass "true" if jar mode execution')
@@ -967,7 +967,7 @@ def main():
     else:
         json_status_file = os.path.join(issue_folder_dir, json_status_file_name)
         prev_status_file = os.path.join(issue_folder_dir, preservation_status_file_name)
-    # Write JSON data in a file. This can be compared from specSlice to verify that the successful # of targets do not get reduced in a PR
+    # Write JSON data in a file. This can be compared from TypeSlice to verify that the successful # of targets do not get reduced in a PR
     with open(json_status_file, "w") as json_file:
         json.dump(json_status, json_file, indent= 2)
     with open(prev_status_file, "w") as json_file:

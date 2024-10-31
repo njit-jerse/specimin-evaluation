@@ -1,4 +1,4 @@
-This script executes SpecSlice on various bugs reported in the Checker Framework,
+This script executes TypeSlice on various bugs reported in the Checker Framework,
 NullAway, and Javac and records the execution status. This anonymized version of
 the evaluation scripts is not expected to actually run, because it depends on
 the existence of forked versions of each target repository (which we have not
@@ -12,7 +12,7 @@ until the (unblinded) artifact evaluation.
 Table 1 of the paper. The entry point is `main.py`.
 * `exclusions.md`: this file lists three bugs that we excluded from Table 1 despite
 the scripts supporting them, because of various issues in reproducing the original
-problem in the analysis without SpecSlice. The justifications are explained individually
+problem in the analysis without TypeSlice. The justifications are explained individually
 in this file.
 * `check_compilation.sh/.bat`: helper scripts to check that the outputs for each target compile
 * `resources/test_data.json`: this json file lists all of the targets and various information

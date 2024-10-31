@@ -13,11 +13,11 @@ class TableGenerator:
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>SpecSlice Evalutaion Result</title>
+                    <title>TypeSlice Evalutaion Result</title>
                 </head>
                 <body>
 
-                <h2>SPECSLICE Evalutaion Result</h2>
+                <h2>TypeSlice Evalutaion Result</h2>
 
                 <table border="1">
                     <thead>

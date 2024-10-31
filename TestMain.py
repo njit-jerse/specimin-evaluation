@@ -11,20 +11,20 @@ class TestMain(unittest.TestCase):
         #TODO: previously used cf-1291 (index 0) fails when absolute path of the target is used. Will investigate it later. 
         #Currently using cf-6060 
         cls.json_data = main.read_json_from_file('resources/test_data.json')[3]
-        sp_env_var = main.get_specSlice_env_var()
+        sp_env_var = main.get_TypeSlice_env_var()
         if sp_env_var is not None and os.path.exists(sp_env_var) and os.path.isdir(sp_env_var):
-            print("Local SpecSlice copy is being used")
-            cls.specSlice_dir = sp_env_var
+            print("Local TypeSlice copy is being used")
+            cls.TypeSlice_dir = sp_env_var
         else:
-            print("Local SpecSlice not found. Cloning a SpecSlice copy")
-            main.clone_repository('https://github.com/kelloggm/specSlice.git', 'resources')
-            cls.specSlice_dir = os.path.abspath("resources/specSlice")
+            print("Local TypeSlice not found. Cloning a TypeSlice copy")
+            main.clone_repository('https://github.com/kelloggm/TypeSlice.git', 'resources')
+            cls.TypeSlice_dir = os.path.abspath("resources/TypeSlice")
 
     @classmethod
     def tearDownClass(cls):
-        # deleting specSlice from resources
+        # deleting TypeSlice from resources
         try:
-            shutil.rmtree('resources/specSlice')
+            shutil.rmtree('resources/TypeSlice')
         except Exception as e:
             print(f"Error occurred {e}")
         # removing any issue project cloned in resources   
@@ -40,8 +40,8 @@ class TestMain(unittest.TestCase):
         url = 'git@github.com:codespecs/daikon.git'
         self.assertEqual(main.get_repository_name(url), 'daikon')
 
-        url = 'git@github.com:kelloggm/specSlice.git'
-        self.assertEqual(main.get_repository_name(url), 'specSlice')
+        url = 'git@github.com:kelloggm/TypeSlice.git'
+        self.assertEqual(main.get_repository_name(url), 'TypeSlice')
 
         url = 'git@github.com:typetools/checker-framework.git'
         self.assertEqual(main.get_repository_name(url), 'checker-framework')
@@ -49,13 +49,13 @@ class TestMain(unittest.TestCase):
         url = 'git@github.com:awslabs/aws-kms-compliance-checker.git'
         self.assertEqual(main.get_repository_name(url), 'aws-kms-compliance-checker')
 
-        url = 'https://github.com/kelloggm/specSlice.git'
-        self.assertEqual(main.get_repository_name(url), 'specSlice')
+        url = 'https://github.com/kelloggm/TypeSlice.git'
+        self.assertEqual(main.get_repository_name(url), 'TypeSlice')
 
         url = 'git@github.com:awslabs/aws-kms-compliance-checker.git' 
         self.assertNotEqual(main.get_repository_name(url), 'aws-km-compliance-checker')
     
-    def test_build_specSlice_command(self):
+    def test_build_TypeSlice_command(self):
         proj_name = 'cassandra'
         root = 'src/java'
         targets = [{
@@ -66,13 +66,13 @@ class TestMain(unittest.TestCase):
                    }]
  
         target_dir = '/user/ISSUES/cf-6077'
-        command = main.build_specSlice_command(proj_name, target_dir, root, targets)
+        command = main.build_TypeSlice_command(proj_name, target_dir, root, targets)
         target_command = ''
-        with open('resources/specSlice_command_cf-6077.txt','r') as file:
+        with open('resources/TypeSlice_command_cf-6077.txt','r') as file:
             target_command = file.read()
         target_command = target_command.strip()
         self.assertEqual(command, target_command)
-        # not executing since this crashes specSlice
+        # not executing since this crashes TypeSlice
         proj_name = 'kafka-sensors'
         root = 'src/main/java/'
         targets = [{
@@ -83,12 +83,12 @@ class TestMain(unittest.TestCase):
                    }]
 
         target_dir = '/user/ISSUES/cf-6019'
-        command = main.build_specSlice_command(proj_name, target_dir, root, targets)
-        with open('resources/specSlice_command_cf-6019.txt','r') as file:
+        command = main.build_TypeSlice_command(proj_name, target_dir, root, targets)
+        with open('resources/TypeSlice_command_cf-6019.txt','r') as file:
             target_command = file.read()
         target_command = target_command.strip()
         self.assertEqual(command, target_command)
-        #not executing since it crashes specSlice.
+        #not executing since it crashes TypeSlice.
 
         # make 
         issue_name = self.json_data[JsonKeys.ISSUE_ID.value]
@@ -101,13 +101,13 @@ class TestMain(unittest.TestCase):
         self.assertTrue(main.is_git_directory(f"resources/{issue_name}/input/{project_name}")) 
         main.change_branch(self.json_data[JsonKeys.BRANCH.value], f"resources/{issue_name}/input/{project_name}")
 
-        #build_specSlice_command accept absolute path of the root directory.
-        command = main.build_specSlice_command(project_name, os.path.abspath(f"resources/{issue_name}"), self.json_data[JsonKeys.ROOT_DIR.value], self.json_data[JsonKeys.TARGETS.value])
+        #build_TypeSlice_command accept absolute path of the root directory.
+        command = main.build_TypeSlice_command(project_name, os.path.abspath(f"resources/{issue_name}"), self.json_data[JsonKeys.ROOT_DIR.value], self.json_data[JsonKeys.TARGETS.value])
         print(command)
-        result = main.run_specSlice(issue_name, command, self.specSlice_dir)
+        result = main.run_TypeSlice(issue_name, command, self.TypeSlice_dir)
         self.assertEqual(result.status, "PASS")
  
-    def test_run_specSlice(self):
+    def test_run_TypeSlice(self):
         proj_name = 'test_proj'
         root = ''
         targets = [{
@@ -118,8 +118,8 @@ class TestMain(unittest.TestCase):
                    }]
         target_dir = 'resources/onefilesimple'
 
-        command = main.build_specSlice_command(proj_name, os.path.abspath(target_dir), root, targets)
-        result = main.run_specSlice(proj_name, command, self.specSlice_dir)
+        command = main.build_TypeSlice_command(proj_name, os.path.abspath(target_dir), root, targets)
+        result = main.run_TypeSlice(proj_name, command, self.TypeSlice_dir)
         self.assertEqual(result.status, "PASS")
 
 

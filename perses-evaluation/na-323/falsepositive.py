@@ -19,7 +19,7 @@ import argparse
 import time
 import math
 import statistics
-#ripped pattern data function from specSlice eval repo
+#ripped pattern data function from TypeSlice eval repo
 def compare_pattern_data(expected_log_path, actual_log_path, bug_pattern_data):
     with open(expected_log_path, "r") as file:
         expected_log_file_content = file.read()
