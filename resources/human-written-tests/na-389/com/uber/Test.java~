@@ -1,0 +1,13 @@
+           package com.uber;
+           import javax.annotation.Nullable;
+           import com.uber.lib.unannotated.collections.Item;
+           import com.uber.lib.unannotated.collections.MapLike;
+           public class Test {
+            public static MapLike test_389(@Nullable Item<String, String> item) {
+             MapLike<String, String> map = new MapLike<String, String>();
+             if (item != null) { // Required to trigger dataflow analysis
+               map.put(item);
+		  }
+             return map;
+            }
+           }
