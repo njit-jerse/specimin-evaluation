@@ -572,22 +572,21 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
         if os.path.exists(log_file):
             os.remove(log_file)
 
-        target_gradle_script = os.path.join(gradle_files_destination_path, "build.gradle")
         # Open the log file in write mode
         min_prgrm_build_status = None
         with open(log_file, "w") as log_file_obj:
             command = ""
             # avoid mixed slashes + convert \ to / for gradlew
             if isWindows():
-                target_gradle_script = os.path.normpath(target_gradle_script).replace('\\', '/')
+                gradle_files_destination_path = os.path.normpath(gradle_files_destination_path).replace('\\', '/')
                 command = "gradlew.bat"
             else:
                 command = "./gradlew"
             
             if issue_id.startswith("na"):
-                command = f"{command} -b {target_gradle_script} build"
+                command = f"{command} build --project-dir {gradle_files_destination_path}"
             else:
-                command = f"{command} -b {target_gradle_script} compileJava"
+                command = f"{command} compileJava --project-dir {gradle_files_destination_path}"
 
             min_prgrm_build_status = subprocess.run(command, cwd = specimin_path, shell=True, stderr=log_file_obj)
             print(f"{issue_id} Minimized program gradle build status = {min_prgrm_build_status.returncode}")
