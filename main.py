@@ -588,7 +588,8 @@ def performEvaluation(issue_data, isJarMode = False) -> Result:
             else:
                 command = f"{command} compileJava --project-dir {gradle_files_destination_path}"
 
-            min_prgrm_build_status = subprocess.run(command, cwd = specimin_path, shell=True, stderr=log_file_obj)
+            # Don't use gradle 9: CF doesn't give file path or line number for some reason
+            min_prgrm_build_status = subprocess.run(command, cwd = os.path.join("resources"), shell=True, stderr=log_file_obj)
             print(f"{issue_id} Minimized program gradle build status = {min_prgrm_build_status.returncode}")
         if min_prgrm_build_status.returncode == 0:
             print(f"{issue_id} Minimized program gradle build successful. Expected: Fail")

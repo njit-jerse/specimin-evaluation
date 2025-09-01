@@ -66,8 +66,7 @@ for %%t in (!issue_ids!) do (
    if "!testcase!"=="jdk-8319461" set continue=1
 
    if !continue!==0 (
-      cd !testcase!
-      if !errorlevel!==1 (
+      cd !testcase! || (
          rem Due to how the specimin CI runs (choosing only a few test cases to run), we should
          rem ignore test cases which were not run
          echo !testcase! not found. Ignoring it.
@@ -76,8 +75,7 @@ for %%t in (!issue_ids!) do (
    )
 
    if !continue!==0 (
-      cd !min_program_dir!\
-      if !errorlevel!==1 (
+      cd !min_program_dir!\ || (
          set compile_status_json=!compile_status_json!^!LF!  "!testcase!": "FAIL",
          set continue=1
       )
@@ -104,12 +102,11 @@ for %%t in (!issue_ids!) do (
       for /r %%F in (*.java) do (
          set "JAVA_FILES=!JAVA_FILES! %%F"
       )
-      if "!testcase!"=="na-97" do (
+      if "!testcase!"=="na-97" (
          set "JAVA_FILES=!JAVA_FILES! --patch-module java.base=jdk/src"
       )
       javac -classpath "%SPECIMIN%\src\test\resources\shared\checker-qual-3.42.0.jar" !JAVA_FILES!
-      set javac_status=!errorlevel!
-      if !javac_status!==0 ( 
+      if !errorlevel!==0 (
          echo Running javac on !testcase!/output PASSES
          set compile_status_json=!compile_status_json!^!LF!  "!testcase!": "PASS",
       ) else (
@@ -121,7 +118,9 @@ for %%t in (!issue_ids!) do (
    cd !issues_root! || exit /b 1
 )
 
-if "!compile_status_json:~-1!"=="," set compile_status_json=!compile_status_json:~0,-1!
+if "!compile_status_json:~-1!"=="," (
+   set compile_status_json=!compile_status_json:~0,-1!
+)
 
 set compile_status_json=!compile_status_json!^!LF!^}
 
