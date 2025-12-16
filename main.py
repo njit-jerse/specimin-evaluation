@@ -329,6 +329,8 @@ def build_specimin_command(project_name: str,
     target_method_list = []
     target_field_list = []
 
+    nonprimary_subcommand = ""
+
     for target in targets:
 
         method_name = target[JsonKeys.METHOD_NAME.value]
@@ -356,6 +358,7 @@ def build_specimin_command(project_name: str,
 
             if JsonKeys.NON_PRIMARY_CLASS.value in target and target[JsonKeys.NON_PRIMARY_CLASS.value]:
                 qualified_method_name = package_name + "." + target[JsonKeys.NON_PRIMARY_CLASS.value] + inner_class_name + "#" + method_name
+                nonprimary_subcommand = " --disable-root-validation " # otherwise, Specimin rejects the command as malformed
             else:
                 qualified_method_name = package_name + "." + os.path.splitext(file_name)[0]+ inner_class_name + "#" + method_name
             target_method_list.append(qualified_method_name)
@@ -385,7 +388,7 @@ def build_specimin_command(project_name: str,
     if modularity_model:
         model_subcommand = " --modularityModel " + f"\"{modularity_model}\""
 
-    command_args = root_dir_subcommand + " " + output_dir_subcommand + model_subcommand + " " + target_file_subcommand + " " + target_method_subcommand +  target_field_subcommand + jar_path_subcommand
+    command_args = root_dir_subcommand + " " + output_dir_subcommand + model_subcommand + " " + nonprimary_subcommand + target_file_subcommand + " " + target_method_subcommand +  target_field_subcommand + jar_path_subcommand
     
 
     command = ""
